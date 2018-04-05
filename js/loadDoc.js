@@ -23,7 +23,7 @@ $("input[name=lang]").change(function(){
     loadDoc();
 });
 
-$("#inputText").on('keyup paste', function(e) {
+$("#inputText").on('keyup paste', function() {
     clearTimeout($(this).data('timeout'));
     $(this).data('timeout', setTimeout(function(){
         loadDoc();

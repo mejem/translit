@@ -45,7 +45,7 @@
 
 <script>
 // pamatovat si naposledy zaskrtnuty jazyk
-$('#uk').prop('checked', localStorage['checked'] == 'uk');
+$('#' + localStorage["checked"]).prop('checked', true);
 
 $('#ru').click(function () {
     localStorage["checked"] = "ru";
@@ -61,7 +61,7 @@ $('#uk').click(function () {
 <script>
   document.getElementById('output').innerHTML = '';
 </script>
-<script src="js/loadDoc.js"></script>
+<script src="js/translit.js"></script>
 </div>
 
 <div class="tooltip w3-container">
@@ -74,7 +74,7 @@ $('#uk').click(function () {
 function copy() {
   var copyText = document.getElementById("output");
   var tooltip = document.getElementById("myTooltip");
-  if (copyText.innerHTML != 0) {
+  if (copyText.innerHTML.length != 0) {
     copyText.select();
     document.execCommand("Copy");
     tooltip.innerHTML = "Zkopírováno";
