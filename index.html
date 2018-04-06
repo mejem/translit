@@ -20,7 +20,7 @@
 
 <div class="w3-container">
 <h4>Cyrilice</h4>
-<textarea id="inputText" rows='12' autofocus></textarea>
+<textarea id="inputText" rows='12' spellcheck="false" autofocus></textarea>
 </div>
 
 <div class="w3-container">
@@ -57,19 +57,22 @@ $('#uk').click(function () {
 
 <div class="w3-container">
 <h4>Latinka</h4>
-<textarea class="readonly" id="output" rows='12' readonly>Tato aplikace vyžaduje zapnutý JavaScript.</textarea>
+<textarea class="readonly" id="output" rows='12' spellcheck="false" readonly>Tato aplikace vyžaduje zapnutý JavaScript.</textarea>
 <script>
   document.getElementById('output').innerHTML = '';
 </script>
 <script>
+  $('#loader').removeAttr("style").hide();
   var translit = new Worker('js/translit.js');
   var lang = $("input[name=lang]:checked");
   var inputText = $("#inputText");
   inputText.on('input', function() {
       clearTimeout($(this).data('timeout'));
       $(this).data('timeout', setTimeout(function(){
+        $('#loader').show();
         translit.postMessage({lang: lang.val(), inputText: inputText.val()});
-      }, 300));
+        $('#loader').hide();
+      }, 100));
   });
   translit.onmessage = function(e) {
     $('#output').val(e.data);
