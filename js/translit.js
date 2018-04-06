@@ -21,7 +21,7 @@ function Rules_ru() {
     "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЫыЬьЭэ" + "ХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuUuCcČčŠš””Yy’’Èè"
+    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš””Yy’’Èè"
   ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   var vocals = Array.from("АаЕеЁёИиОоУуЪъЫыЬьЭэЮюЯя");
   var rules = {};
