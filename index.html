@@ -41,8 +41,6 @@
 </label>
 </div>
 
-<div id="loader" style="visibility: hidden" class="w3-display-middle loader loader2"></div>
-
 <script>
 // pamatovat si naposledy zaskrtnuty jazyk
 $('#' + localStorage["checked"]).prop('checked', true);
@@ -57,22 +55,23 @@ $('#uk').click(function () {
 
 <div class="w3-container">
 <h4>Latinka</h4>
-<textarea class="readonly" id="output" rows='12' spellcheck="false" readonly>Tato aplikace vyžaduje zapnutý JavaScript.</textarea>
+<textarea class="readonly" id="output" rows='12' spellcheck="false" readonly>
+  Tato aplikace vyžaduje zapnutý JavaScript.
+</textarea>
 <script>
   document.getElementById('output').innerHTML = '';
 </script>
 <script>
-  $('#loader').removeAttr("style").hide();
   var translit = new Worker('js/translit.js');
-  var lang = $("input[name=lang]:checked");
   var inputText = $("#inputText");
   inputText.on('input', function() {
       clearTimeout($(this).data('timeout'));
       $(this).data('timeout', setTimeout(function(){
-        $('#loader').show();
-        translit.postMessage({lang: lang.val(), inputText: inputText.val()});
-        $('#loader').hide();
+        translit.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.val()});
       }, 100));
+  });
+  $("input[name=lang]").change(function(){
+    translit.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.val()});
   });
   translit.onmessage = function(e) {
     $('#output').val(e.data);
@@ -90,7 +89,7 @@ $('#uk').click(function () {
 function copy() {
   var copyText = document.getElementById("output");
   var tooltip = document.getElementById("myTooltip");
-  if (copyText.innerHTML.length != 0) {
+  if (copyText.value.length != 0) {
     copyText.select();
     document.execCommand("Copy");
     tooltip.innerHTML = "Zkopírováno";
