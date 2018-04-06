@@ -1,16 +1,13 @@
 "use strict";
 
-// $("#loader").removeAttr("style");
-// $("#loader").hide()
+onmessage = function(e) {
+  var result = transliterate(e.data.lang, e.data.inputText);
+  postMessage(result);
+}
 
-function translit() {
-  // var loader = document.getElementById('loader');
-  // loader.style.visibility = 'visible';
-  var lang = $("input[name=lang]:checked").val();
-  var input = Array.from($("#inputText").val());
-
-  $("#output").val(tr_ukrainian(input));
-  // loader.style.visibility = 'hidden';
+function transliterate(lang, inputText) {
+  var input = Array.from(inputText);
+  return tr_ukrainian(input);
 }
 
 function Rules_uk() {
@@ -56,16 +53,3 @@ function isBetweenUpper(len, input, i) {
 function isUpper(str) {
   return str == str.toUpperCase();
 }
-
-
-$("input[name=lang]").change(translit);
-
-$("#inputText").on('input', function() {
-    clearTimeout($(this).data('timeout'));
-    $(this).data('timeout', setTimeout(function(){
-      var loader = document.getElementById('loader');
-      loader.style.visibility = 'visible';
-      translit();
-      loader.style.visibility = 'hidden';
-    }, 300));
-});

@@ -61,7 +61,20 @@ $('#uk').click(function () {
 <script>
   document.getElementById('output').innerHTML = '';
 </script>
-<script src="js/translit.js"></script>
+<script>
+  var translit = new Worker('js/translit.js');
+  var lang = $("input[name=lang]:checked");
+  var inputText = $("#inputText");
+  inputText.on('input', function() {
+      clearTimeout($(this).data('timeout'));
+      $(this).data('timeout', setTimeout(function(){
+        translit.postMessage({lang: lang.val(), inputText: inputText.val()});
+      }, 300));
+  });
+  translit.onmessage = function(e) {
+    $('#output').val(e.data);
+  }
+</script>
 </div>
 
 <div class="tooltip w3-container">
