@@ -35,11 +35,11 @@ function Rules_ru() {
 
 function Rules_uk() {
   var cyrilic = Array.from(
-    "АаБбВвГгҐґДдЕеЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЬь" + "ЄєХхЩщЮюЯя"
+    "АаБбВвГгҐґДдЕеЖжЗзИиІіЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЬь" + "ЄєЇїХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvHhGgDdEeŽžZzYyÌìÏïJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš’’"
-  ).concat(['Je', 'je', 'Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
+    "AaBbVvHhGgDdEeŽžZzYyÌìJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš’’"
+  ).concat(['Je', 'je', 'Ji', 'ji', 'Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   var rules = {};
   var len = cyrilic.length;
   for (var i = 0; i < len; i++) {
@@ -100,7 +100,7 @@ function tr_ukrainian(input) {
   var output = new Array(len);
   for (var i = 0; i < len; i++) {
     if (input[i] in rules_uk) {
-      if ("ЄХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
+      if ("ЄЇХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
         output[i] = rules_uk[input[i]].toUpperCase();
       } else {
         output[i] = rules_uk[input[i]];
