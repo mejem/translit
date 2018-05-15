@@ -3,18 +3,26 @@ body {
   background-color: #c6e0ff;
 }
 
-textarea {
-    border-radius: 10px;
-    padding: 8px;
-    width: 100%;
-    float: left;
-    outline: none;
+div.textarealook {
+  -moz-appearance: textfield-multiline;
+  -webkit-appearance: textarea;
+  font: medium -moz-fixed;
+  font: -webkit-small-control;
+  border: 1px solid gray;
+  height: 256px;
+  overflow: auto;
+  resize: both;
+  background-color: white;
+  border-radius: 10px;
+  padding: 8px;
+  width: 100%;
+  float: left;
+  outline: none;
 }
 
-textarea.readonly {
+div.grayed {
   background-color: #d6d6d6;
 }
-
 
 span.lang {
   margin: 10px;

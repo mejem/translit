@@ -20,8 +20,15 @@
 
 <div class="w3-container">
 <h4>Cyrilice</h4>
-<textarea id="inputText" rows='12' spellcheck="false" autofocus></textarea>
+<div id="inputText" class="textarealook" contenteditable="true" spellcheck="false"></div>
 </div>
+
+<script>
+  $(window).on("load", function() {
+  $("#inputText").focus();
+  });
+</script>
+
 
 <div class="w3-container">
 <label for="ru">
@@ -55,43 +62,56 @@ $('#uk').click(function () {
 
 <div class="w3-container">
 <h4>Latinka</h4>
-<textarea class="readonly" id="output" rows='12' spellcheck="false" readonly>
+<!-- <textarea class="readonly" id="output" rows='12' spellcheck="false" readonly>
   Tato aplikace vyžaduje zapnutý JavaScript.
 </textarea>
 <script>
   document.getElementById('output').innerHTML = '';
-</script>
+</script> -->
+
+<div id="output" class="textarealook grayed"></div>
+
 <script>
   var translit = new Worker('js/translit.js');
   var inputText = $("#inputText");
   inputText.on('input', function() {
       clearTimeout($(this).data('timeout'));
       $(this).data('timeout', setTimeout(function(){
-        translit.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.val()});
+        translit.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.html()});
       }, 100));
   });
   $("input[name=lang]").change(function(){
-    translit.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.val()});
+    translit.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.html()});
   });
   translit.onmessage = function(e) {
-    $('#output').val(e.data);
+    $('#output').html(e.data);
   }
 </script>
+
 </div>
 
 <div class="tooltip w3-container">
-  <button class="w3-btn w3-white w3-border w3-border-blue w3-round" onclick="copy()" onmouseout="outFunc()">
+  <button class="w3-btn w3-white w3-border w3-border-blue w3-round"
+          onclick="copyToClip(document.getElementById('output').innerHTML)"
+          onmouseout="outFunc()">
     <span class="tooltiptext" id="myTooltip">Zkopírovat do schánky</span>
     Kopírovat
   </button>
+</div>
 
 <script>
-function copy() {
-  var copyText = document.getElementById("output");
+// http://jsfiddle.net/jdhenckel/km7prgv4/3/
+function copyToClip(str) {
   var tooltip = document.getElementById("myTooltip");
-  if (copyText.value.length != 0) {
-    copyText.select();
-    document.execCommand("Copy");
+  if (str) {
+    function listener(e) {
+      e.clipboardData.setData("text/html", str);
+      e.clipboardData.setData("text/plain", str);
+      e.preventDefault();
+    }
+    document.addEventListener("copy", listener);
+    document.execCommand("copy");
+    document.removeEventListener("copy", listener);
     tooltip.innerHTML = "Zkopírováno";
   } else {
     tooltip.innerHTML = "Výstup je prázdný";
@@ -102,9 +122,8 @@ function outFunc() {
   tooltip.innerHTML = "Zkopírovat do schánky";
 }
 </script>
-</div>
 
-</div>
+</div> <!-- konec main -->
 
 <div class="footer w3-dark-grey">
   <p class="footer">
