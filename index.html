@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <title>Transliterace</title>
+  <title>Transliteration</title>
 
   <link rel="stylesheet" href="css/w3.css">
   <link rel="stylesheet" href="css/style.css">
@@ -12,29 +12,37 @@
 
 <body>
 
-<div class="w3-blue">
-  <h1>Transliterace</h1>
+<div class="w3-container w3-blue">
+  <div class="header">
+    <h1 class="header">Transliteration</h1>
+    <!-- <span class="header">
+      <a id="webPageLang" href="#">Test</a>
+    </span>
+    <span class="header">
+      <button class="w3-btn w3-white w3-border w3-border-blue w3-round"
+              onclick="switchWebpageLang()">
+        Test
+      </button> -->
+    </span>
+  </div>
 </div>
+
+<!-- navigator.language.startsWith("ru") -->
+
 
 <div class="main">
 
 <div class="w3-container">
-<h4>Cyrilice</h4>
+<h4>Input: Cyrillic script</h4>
 <div id="inputText" class="textarealook" contenteditable="true" spellcheck="false"></div>
 </div>
-
-<script>
-  $(window).on("load", function() {
-  $("#inputText").focus();
-  });
-</script>
 
 
 <div class="w3-container">
 <label for="ru">
   <span class="lang w3-btn w3-white w3-border w3-round-large">
     <input class="w3-check" id="ru" type="radio" name="lang" value="ru" checked>
-    ruština
+    Russian
     <img src="img/russian_federation_flag.gif" class="w3-border w3-round" style="max-width:50px" alt="ru flag">
   </span>
 </label>
@@ -42,51 +50,18 @@
 <label for="uk">
   <span class="lang w3-btn w3-white w3-border w3-round-large">
     <input class="w3-check" id="uk" type="radio" name="lang" value="uk">
-    ukrajinština
+    Ukrainian
     <img src="img/ukraine_flag.gif" class="w3-border w3-round" style="max-width:50px" alt="uk flag">
   </span>
 </label>
 </div>
 
-<script>
-// pamatovat si naposledy zaskrtnuty jazyk
-$('#' + localStorage["checked"]).prop('checked', true);
-
-$('#ru').click(function () {
-    localStorage["checked"] = "ru";
-});
-$('#uk').click(function () {
-    localStorage["checked"] = "uk";
-});
-</script>
-
 <div class="w3-container">
-<h4>Latinka</h4>
-<!-- <textarea class="readonly" id="output" rows='12' spellcheck="false" readonly>
-  Tato aplikace vyžaduje zapnutý JavaScript.
-</textarea>
-<script>
-  document.getElementById('output').innerHTML = '';
-</script> -->
+<h4>Output: Latin script</h4>
 
-<div id="output" class="textarealook grayed"></div>
-
-<script>
-  var translit = new Worker('js/translit.js');
-  var inputText = $("#inputText");
-  inputText.on('input', function() {
-      clearTimeout($(this).data('timeout'));
-      $(this).data('timeout', setTimeout(function(){
-        translit.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.html()});
-      }, 100));
-  });
-  $("input[name=lang]").change(function(){
-    translit.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.html()});
-  });
-  translit.onmessage = function(e) {
-    $('#output').html(e.data);
-  }
-</script>
+<div id="output" class="textarealook">
+  Please enable JavaScript.
+</div>
 
 </div>
 
@@ -94,43 +69,20 @@ $('#uk').click(function () {
   <button class="w3-btn w3-white w3-border w3-border-blue w3-round"
           onclick="copyToClip(document.getElementById('output').innerHTML)"
           onmouseout="outFunc()">
-    <span class="tooltiptext" id="myTooltip">Zkopírovat do schánky</span>
-    Kopírovat
+    <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+    Copy
   </button>
 </div>
 
-<script>
-// http://jsfiddle.net/jdhenckel/km7prgv4/3/
-function copyToClip(str) {
-  var tooltip = document.getElementById("myTooltip");
-  if (str) {
-    function listener(e) {
-      e.clipboardData.setData("text/html", str);
-      e.clipboardData.setData("text/plain", str);
-      e.preventDefault();
-    }
-    document.addEventListener("copy", listener);
-    document.execCommand("copy");
-    document.removeEventListener("copy", listener);
-    tooltip.innerHTML = "Zkopírováno";
-  } else {
-    tooltip.innerHTML = "Výstup je prázdný";
-  }
-}
-function outFunc() {
-  var tooltip = document.getElementById("myTooltip");
-  tooltip.innerHTML = "Zkopírovat do schánky";
-}
-</script>
-
-</div> <!-- konec main -->
+</div> <!-- end of main -->
 
 <div class="footer w3-dark-grey">
   <p class="footer">
-    <a href="https://github.com/mejem/translit" target="_blank">zdrojový kód</a>
+    <a href="https://github.com/mejem/translit" target="_blank">source code</a>
   </p>
 </div>
 
-</body>
+<script src="js/translit.js"></script>
 
+</body>
 </html>

@@ -1,123 +1,73 @@
 "use strict";
 
-onmessage = function onmessage(e) {
-  var result = transliterate(e.data.lang, e.data.inputText);
-  postMessage(result);
-};
+// dismiss "enable JavaScript" warning
+document.getElementById('output').innerHTML = '';
 
-function transliterate(lang, inputText) {
-  var input = Array.from(inputText);
-  if (lang == 'ru') {
-    return tr_russian(input);
-  } else if (lang == 'uk') {
-    return tr_ukrainian(input);
+// focus on input
+$(window).on("load", function() {
+  $("#inputText").focus();
+});
+
+// webpage language
+var text = {};
+text.en = {
+  transliteration: "Transliteration",
+  cyrilic: "Input: Cyrillic script",
+  latin: "Output: Latin script",
+  ru: "Russian",
+  uk: "Ukrainian",
+  copy: "Copy",
+  copyToClip: "Copy to clipboard",
+  copied: "Copied!",
+  empty: "Output empty",
+}
+
+// remember last checked translit language
+$(window).on("load", function() {
+  $('#' + localStorage["checked"]).prop('checked', true);
+});
+
+$('#ru').click(function () {
+    localStorage["checked"] = "ru";
+});
+$('#uk').click(function () {
+    localStorage["checked"] = "uk";
+});
+
+// traliterate
+var translitWorker = new Worker('js/translitWorker.js');
+var inputText = $("#inputText");
+inputText.on('input', function() {
+    clearTimeout($(this).data('timeout'));
+    $(this).data('timeout', setTimeout(function(){
+      translitWorker.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.html()});
+    }, 100));
+});
+$("input[name=lang]").change(function(){
+  translitWorker.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.html()});
+});
+translitWorker.onmessage = function(e) {
+  $('#output').html(e.data);
+}
+
+// copy to clipboard (http://jsfiddle.net/jdhenckel/km7prgv4/3/)
+function copyToClip(str) {
+  var tooltip = document.getElementById("myTooltip");
+  if (str) {
+    function listener(e) {
+      e.clipboardData.setData("text/html", str);
+      e.clipboardData.setData("text/plain", str);
+      e.preventDefault();
+    }
+    document.addEventListener("copy", listener);
+    document.execCommand("copy");
+    document.removeEventListener("copy", listener);
+    tooltip.innerHTML = "Copied!";
   } else {
-    throw 'Error: Unsupported lang string: ' + lang;
+    tooltip.innerHTML = "Output empty";
   }
 }
-
-function Rules_ru() {
-  var cyrilic = Array.from(
-    "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЫыЬьЭэ" + "ХхЩщЮюЯя"
-  );
-  var czech = Array.from(
-    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš””Yy’’Èè"
-  ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
-  var vocals = Array.from("АаЕеЁёИиОоУуЪъЫыЬьЭэЮюЯя");
-  var rules = {};
-  var len = cyrilic.length;
-  for (var i = 0; i < len; i++) {
-    rules[cyrilic[i]] = czech[i];
-  }
-  rules["vocals"] = vocals;
-  return rules;
-}
-
-function Rules_uk() {
-  var cyrilic = Array.from(
-    "АаБбВвГгҐґДдЕеЖжЗзИиІіЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЬь" + "ЄєЇїХхЩщЮюЯя"
-  );
-  var czech = Array.from(
-    "AaBbVvHhGgDdEeŽžZzYyÌìJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš’’"
-  ).concat(['Je', 'je', 'Ji', 'ji', 'Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
-  var rules = {};
-  var len = cyrilic.length;
-  for (var i = 0; i < len; i++) {
-    rules[cyrilic[i]] = czech[i];
-  }
-  return rules;
-}
-
-var rules_ru = Rules_ru();
-var rules_uk = Rules_uk();
-
-function tr_russian(input) {
-  var len = input.length;
-  var output = new Array(len);
-  for (var i = 0; i < len; i++) {
-    if (input[i] in rules_ru) {
-      if ("ЕЁ".includes(input[i]) &&
-        (atBeginAndAfterApos(input, i) || rules_ru.vocals.includes(input[i - 1]))
-      ) {
-        output[i] = 'J';
-        if (isBetweenUpper(len, input, i)) {
-          output[i] += 'E';
-        } else {
-          output[i] += 'e';
-        }
-      } else if ("её".includes(input[i]) &&
-        (atBeginAndAfterApos(input, i) || rules_ru.vocals.includes(input[i - 1]))
-      ) {
-        output[i] = 'je';
-      } else if (input[i] == 'И' && i > 0 && input[i - 1] == 'Ь') {
-        output[i] = 'JI';
-      } else if (input[i] == 'и' && i > 0 && input[i - 1] == 'Ь') {
-        output[i] = 'Ji';
-      } else if (input[i] == 'и' && i > 0 && input[i - 1] == 'ь') {
-        output[i] = ('ji');
-      } else if ("ХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
-        output[i] = rules_ru[input[i]].toUpperCase();
-      } else {
-        output[i] = rules_ru[input[i]];
-      }
-    } else {
-      output[i] = input[i];
-    }
-  }
-  return output.join('');
-}
-
-function atBeginAndAfterApos(input, i) {
-  return (
-    i == 0 ||
-    /[\s\n\r\v\t.,'"+!?\-«»“”„`’‹›—–−]/.test(input[i - 1])
-  );
-}
-
-
-function tr_ukrainian(input) {
-  var len = input.length;
-  var output = new Array(len);
-  for (var i = 0; i < len; i++) {
-    if (input[i] in rules_uk) {
-      if ("ЄЇХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
-        output[i] = rules_uk[input[i]].toUpperCase();
-      } else {
-        output[i] = rules_uk[input[i]];
-      }
-    } else {
-      output[i] = input[i];
-    }
-  }
-  return output.join("");
-}
-
-function isBetweenUpper(len, input, i) {
-  return (
-    (i < len - 1 && isUpper(input[i + 1])) || (i > 0 && isUpper(input[i - 1]))
-  );
-}
-
-function isUpper(str) {
-  return str != str.toLowerCase();
+function outFunc() {
+  var tooltip = document.getElementById("myTooltip");
+  tooltip.innerHTML = "Copy to clipboard";
 }

@@ -1,8 +1,8 @@
-# Transliterace
+# Transliteration
 
-Transliterace z cyrilice do latinky.
+Transliteration from cyrillic to latin script.
 
-- Aplikace běží v prohlížeči (index.html).
-- Je potřeba podpora javascriptu.
+- The app runs in a browser (index.html).
+- JavaScript is required.
 
-Nefunguje v Internet Exploreru do verze 11, jeho nástupce Edge už to zvládá.
+It doesn't work in Internet Explorer <=11.

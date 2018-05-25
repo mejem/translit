@@ -20,9 +20,9 @@ div.textarealook {
   outline: none;
 }
 
-div.grayed {
+/* div.grayed {
   background-color: #d6d6d6;
-}
+} */
 
 span.lang {
   margin: 10px;
@@ -30,13 +30,23 @@ span.lang {
   padding: 10px;
 }
 
-h1 {
+div.header {
   margin-top: 0;
   padding-top: 10px;
   width: 80%;
   margin-left: auto;
   margin-right: auto;
 }
+
+h1.header {
+  display: inline-block;
+}
+
+span.header {
+  display: inline-block;
+  margin-left: 1em;
+}
+
 
 div.main {
   width: 80%;
@@ -82,7 +92,7 @@ p.footer {
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 220px;
+  width: 200px;
   background-color: #555;
   color: #fff;
   text-align: center;
