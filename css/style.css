@@ -40,13 +40,15 @@ div.header {
 
 h1.header {
   display: inline-block;
+  width: 270px;
 }
 
 span.header {
   display: inline-block;
   margin-left: 1em;
+  position: relative;
+  bottom: 8px;
 }
-
 
 div.main {
   width: 80%;

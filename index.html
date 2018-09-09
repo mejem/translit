@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="cs">
+<!-- TODO nastavit jazyk -->
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Transliteration</title>
+  <title>Translit</title>
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 
   <link rel="stylesheet" href="css/w3.css">
   <link rel="stylesheet" href="css/style.css">
@@ -14,15 +16,17 @@
 
 <div class="w3-container w3-blue">
   <div class="header">
-    <h1 class="header">Transliteration</h1>
-    <!-- <span class="header">
-      <a id="webPageLang" href="#">Test</a>
-    </span>
+    <h1 id="t_transliteration" class="header">Transliteration</h1>
     <span class="header">
-      <button class="w3-btn w3-white w3-border w3-border-blue w3-round"
-              onclick="switchWebpageLang()">
-        Test
-      </button> -->
+      <button id="langEn" class="w3-btn w3-border w3-border-blue w3-round w3-white">
+        English
+      </button>
+      <button id="langCs" class="w3-btn w3-border w3-border-blue w3-round">
+        česky
+      </button>
+      <button id="langRu" class="w3-btn w3-border w3-border-blue w3-round">
+        русский
+      </button>
     </span>
   </div>
 </div>
@@ -33,7 +37,7 @@
 <div class="main">
 
 <div class="w3-container">
-<h4>Input: Cyrillic script</h4>
+<h4 id="t_cyrilic">Input: Cyrillic script</h4>
 <div id="inputText" class="textarealook" contenteditable="true" spellcheck="false"></div>
 </div>
 
@@ -42,7 +46,7 @@
 <label for="ru">
   <span class="lang w3-btn w3-white w3-border w3-round-large">
     <input class="w3-check" id="ru" type="radio" name="lang" value="ru" checked>
-    Russian
+    <span id="t_ru">Russian</span>
     <img src="img/russian_federation_flag.gif" class="w3-border w3-round" style="max-width:50px" alt="ru flag">
   </span>
 </label>
@@ -50,16 +54,16 @@
 <label for="uk">
   <span class="lang w3-btn w3-white w3-border w3-round-large">
     <input class="w3-check" id="uk" type="radio" name="lang" value="uk">
-    Ukrainian
+    <span id="t_uk">Ukrainian</span>
     <img src="img/ukraine_flag.gif" class="w3-border w3-round" style="max-width:50px" alt="uk flag">
   </span>
 </label>
 </div>
 
 <div class="w3-container">
-<h4>Output: Latin script</h4>
+<h4 id="t_latin">Output: Latin script</h4>
 
-<div id="output" class="textarealook">
+<div id="output" class="textarealook" contenteditable="true" spellcheck="false">
   Please enable JavaScript.
 </div>
 
@@ -69,8 +73,10 @@
   <button class="w3-btn w3-white w3-border w3-border-blue w3-round"
           onclick="copyToClip(document.getElementById('output').innerHTML)"
           onmouseout="outFunc()">
-    <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-    Copy
+    <span class="tooltiptext" id="myTooltip">
+      <span id="t_copyToClip">Copy to clipboard</span>
+    </span>
+    <span id="t_copy">Copy</span>
   </button>
 </div>
 
