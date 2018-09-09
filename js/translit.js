@@ -8,42 +8,6 @@ $(window).on("load", function() {
   $("#inputText").focus();
 });
 
-// webpage language
-var translatedText = {};
-translatedText.langEn = {
-  transliteration: "Transliteration",
-  cyrilic: "Input: Cyrillic script",
-  latin: "Output: Latin script",
-  ru: "Russian",
-  uk: "Ukrainian",
-  copy: "Copy",
-  copyToClip: "Copy to clipboard",
-  copied: "Copied!",
-  empty: "Output empty",
-}
-translatedText.langRu = {
-  transliteration: "Транслитерация",
-  cyrilic: "Вход: кириллица",
-  latin: "Выход: латиница",
-  ru: "русский",
-  uk: "украинский",
-  copy: "Копировать",
-  copyToClip: "Копировать в буфер",
-  copied: "Скопировать!",
-  empty: "Выход пустой",
-}
-translatedText.langCs = {
-  transliteration: "Transliterace",
-  cyrilic: "Vstup: Cyrilice",
-  latin: "Výstup: Latinka",
-  ru: "ruština",
-  uk: "ukrajinština",
-  copy: "Kopírovat",
-  copyToClip: "Zkopírovat do schránky",
-  copied: "Zkopírováno!",
-  empty: "Výstup je prázdný",
-}
-
 // switch webpage language
 var webpageLanguages = '';
 for (var lang in translatedText) {
@@ -51,11 +15,29 @@ for (var lang in translatedText) {
 }
 webpageLanguages = webpageLanguages.slice(0,-2);
 
+$(window).on("load", function() {
+  var webPageLang = localStorage["lang"];
+  if (webPageLang) {
+    $('#' + webPageLang).addClass("w3-white");
+    switchWebpageLang(webPageLang);
+  } else if (navigator.language.startsWith("cs")) {
+    $('#langCs').addClass("w3-white");
+    switchWebpageLang('langCs');
+  } else if (navigator.language.startsWith("ru")) {
+    $('#langRu').addClass("w3-white");
+    switchWebpageLang('langRu');
+  } else {
+    $('#langEn').addClass("w3-white");
+    switchWebpageLang('langEn');
+  }
+});
+
 $(webpageLanguages).on('click', function() {
   $(webpageLanguages).removeClass("w3-white");
   $(this).addClass("w3-white");
 
   switchWebpageLang(this.id);
+  localStorage["lang"] = this.id;
 });
 
 function switchWebpageLang(lang) {
@@ -94,7 +76,8 @@ translitWorker.onmessage = function(e) {
 
 // copy to clipboard (http://jsfiddle.net/jdhenckel/km7prgv4/3/)
 function copyToClip(str) {
-  var tooltip = document.getElementById("myTooltip");
+  var tooltip = document.getElementById("t_copyToClip");
+  var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
   if (str) {
     function listener(e) {
       e.clipboardData.setData("text/html", str);
@@ -104,14 +87,15 @@ function copyToClip(str) {
     document.addEventListener("copy", listener);
     document.execCommand("copy");
     document.removeEventListener("copy", listener);
-    tooltip.innerHTML = "Copied!";
+    tooltip.innerHTML = translatedText[currentLang].copied;
   } else {
-    tooltip.innerHTML = "Output empty";
+    tooltip.innerHTML = translatedText[currentLang].empty;
   }
 }
 function outFunc() {
-  var tooltip = document.getElementById("myTooltip");
-  tooltip.innerHTML = "Copy to clipboard";
+  var tooltip = document.getElementById("t_copyToClip");
+  var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
+  tooltip.innerHTML = translatedText[currentLang].copyToClip;
 }
 
 // uneditable editabe div (http://jsfiddle.net/wfae8hzv/20/)

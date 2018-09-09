@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Translit</title>
+  <title id="t_translit">Translit</title>
   <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 
   <link rel="stylesheet" href="css/w3.css">
@@ -16,9 +16,9 @@
 
 <div class="w3-container w3-blue">
   <div class="header">
-    <h1 id="t_transliteration" class="header">Transliteration</h1>
+    <h1 id="t_transliteration" class="header">&nbsp;</h1>
     <span class="header">
-      <button id="langEn" class="w3-btn w3-border w3-border-blue w3-round w3-white">
+      <button id="langEn" class="w3-btn w3-border w3-border-blue w3-round">
         English
       </button>
       <button id="langCs" class="w3-btn w3-border w3-border-blue w3-round">
@@ -31,13 +31,11 @@
   </div>
 </div>
 
-<!-- navigator.language.startsWith("ru") -->
-
 
 <div class="main">
 
 <div class="w3-container">
-<h4 id="t_cyrilic">Input: Cyrillic script</h4>
+<h4 id="t_cyrilic">&nbsp;</h4>
 <div id="inputText" class="textarealook" contenteditable="true" spellcheck="false"></div>
 </div>
 
@@ -46,7 +44,7 @@
 <label for="ru">
   <span class="lang w3-btn w3-white w3-border w3-round-large">
     <input class="w3-check" id="ru" type="radio" name="lang" value="ru" checked>
-    <span id="t_ru">Russian</span>
+    <span id="t_ru">&nbsp;</span>
     <img src="img/russian_federation_flag.gif" class="w3-border w3-round" style="max-width:50px" alt="ru flag">
   </span>
 </label>
@@ -54,14 +52,14 @@
 <label for="uk">
   <span class="lang w3-btn w3-white w3-border w3-round-large">
     <input class="w3-check" id="uk" type="radio" name="lang" value="uk">
-    <span id="t_uk">Ukrainian</span>
+    <span id="t_uk">&nbsp;</span>
     <img src="img/ukraine_flag.gif" class="w3-border w3-round" style="max-width:50px" alt="uk flag">
   </span>
 </label>
 </div>
 
 <div class="w3-container">
-<h4 id="t_latin">Output: Latin script</h4>
+<h4 id="t_latin">&nbsp;</h4>
 
 <div id="output" class="textarealook" contenteditable="true" spellcheck="false">
   Please enable JavaScript.
@@ -73,10 +71,8 @@
   <button class="w3-btn w3-white w3-border w3-border-blue w3-round"
           onclick="copyToClip(document.getElementById('output').innerHTML)"
           onmouseout="outFunc()">
-    <span class="tooltiptext" id="myTooltip">
-      <span id="t_copyToClip">Copy to clipboard</span>
-    </span>
-    <span id="t_copy">Copy</span>
+    <span class="tooltiptext" id="t_copyToClip">&nbsp;</span>
+    <span id="t_copy">&nbsp;</span>
   </button>
 </div>
 
@@ -84,10 +80,11 @@
 
 <div class="footer w3-dark-grey">
   <p class="footer">
-    <a href="https://github.com/mejem/translit" target="_blank">source code</a>
+    <a id="t_source" href="https://github.com/mejem/translit" target="_blank">&nbsp;</a>
   </p>
 </div>
 
+<script src="js/dictionary.js"></script>
 <script src="js/translit.js"></script>
 
 </body>
