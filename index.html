@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- TODO nastavit jazyk -->
-<html lang="en">
+<!-- <html lang="en"> -->
+<html>
 <head>
   <meta charset="UTF-8">
   <title id="t_translit">Translit</title>
@@ -8,8 +9,7 @@
 
   <link rel="stylesheet" href="css/w3.css">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/jquery-3.3.1.min.js"></script>
-
+  <script src="js/jquery-3.3.1.slim.min.js"></script>
 </head>
 
 <body>
@@ -39,6 +39,8 @@
 <div id="inputText" class="textarealook" contenteditable="true" spellcheck="false"></div>
 </div>
 
+<!-- TODO -->
+<!-- https://www.nkp.cz/o-knihovne/odborne-cinnosti/zpracovani-fondu/transliterace-nelatinkovych-pisem/cyrilice -->
 
 <div class="w3-container">
 <label for="ru">
@@ -62,6 +64,30 @@
     <input class="w3-check" id="uk" type="radio" name="lang" value="uk">
     <span class="langText" id="t_uk">&nbsp;</span>
     <img src="img/uk.png" class="w3-border w3-round" alt="uk flag">
+  </span>
+</label>
+
+<label for="bg">
+  <span class="lang w3-btn w3-white w3-border w3-round-large">
+    <input class="w3-check" id="bg" type="radio" name="lang" value="bg">
+    <span class="langText" id="t_bg">&nbsp;</span>
+    <img src="img/bg.png" class="w3-border w3-round" alt="bg flag">
+  </span>
+</label>
+
+<label for="mk">
+  <span class="lang w3-btn w3-white w3-border w3-round-large">
+    <input class="w3-check" id="mk" type="radio" name="lang" value="mk">
+    <span class="langText" id="t_mk">&nbsp;</span>
+    <img src="img/mk.png" class="w3-border w3-round" alt="mk flag">
+  </span>
+</label>
+
+<label for="sr">
+  <span class="lang w3-btn w3-white w3-border w3-round-large">
+    <input class="w3-check" id="sr" type="radio" name="lang" value="sr">
+    <span class="langText" id="t_sr">&nbsp;</span>
+    <img src="img/sr.png" class="w3-border w3-round" alt="sr flag">
   </span>
 </label>
 </div>

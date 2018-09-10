@@ -51,14 +51,8 @@ $(window).on("load", function() {
   $('#' + localStorage["checked"]).prop('checked', true);
 });
 
-$('#ru').click(function () {
-    localStorage["checked"] = "ru";
-});
-$('#be').click(function () {
-    localStorage["checked"] = "be";
-});
-$('#uk').click(function () {
-    localStorage["checked"] = "uk";
+$('#ru, #be, #uk, #bg, #mk, #sr').click(function () {
+  localStorage["checked"] = this.id;
 });
 
 // traliterate

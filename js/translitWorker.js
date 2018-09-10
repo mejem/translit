@@ -8,16 +8,19 @@ onmessage = function onmessage(e) {
 function transliterate(lang, inputText) {
   var input = Array.from(inputText);
   if (lang == 'ru') {
-    return tr_russian(input);
-  } else if (lang == 'uk') {
-    return tr_ukrainian(input);
+    return tr_russian(lang, input);
   } else if (lang == 'be') {
-    return tr_belarusian(input);
-  }  else {
+    return tr_russian(lang, input);
+  } else if (!(lang in rules)) {
     throw 'Error: Unsupported lang string: ' + lang;
+  } else {
+    return tr_generic(input, lang);
   }
 }
 
+//
+// define transliteration rules
+//
 function Rules_ru() {
   var cyrillic = Array.from(
     "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЫыЬьЭэ" + "ХхЩщЮюЯя"
@@ -25,14 +28,7 @@ function Rules_ru() {
   var czech = Array.from(
     "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš““Yy‘‘Èè"
   ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
-  var vocals = Array.from("АаЕеЁёИиІіОоУуЎўЪъЫыЬьЭэЮюЯя");
-  var rules = {};
-  var len = cyrillic.length;
-  for (var i = 0; i < len; i++) {
-    rules[cyrillic[i]] = czech[i];
-  }
-  rules["vocals"] = vocals;
-  return rules;
+  return makeRules(cyrillic, czech);
 }
 
 function Rules_be() {
@@ -42,14 +38,7 @@ function Rules_be() {
   var czech = Array.from(
     "AaBbVvHhDdEeEeŽžZzÌìJjKkLlMmNnOoPpRrSsTtUuŬŭFfCcČčŠšYy‘‘Èè"
   ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
-  var vocals = Array.from("АаЕеЁёИиІіОоУуЎўЪъЫыЬьЭэЮюЯя");
-  var rules = {};
-  var len = cyrillic.length;
-  for (var i = 0; i < len; i++) {
-    rules[cyrillic[i]] = czech[i];
-  }
-  rules["vocals"] = vocals;
-  return rules;
+  return makeRules(cyrillic, czech);
 }
 
 function Rules_uk() {
@@ -59,28 +48,68 @@ function Rules_uk() {
   var czech = Array.from(
     "AaBbVvHhGgDdEeŽžZzYyÌìJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš‘‘Ỳỳ"
   ).concat(['Je', 'je', 'Ji', 'ji', 'Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
-  var rules = {};
+  return makeRules(cyrillic, czech);
+}
+
+function Rules_bg() {
+  var cyrillic = Array.from(
+    "АаБбВвГгДдЕеЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЬь" + "ХхЩщЮюЯя"
+  );
+  var czech = Array.from(
+    "AaBbVvGgDdEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠšĂă‘‘"
+  ).concat(['Ch', 'ch', 'Št', 'št', 'Ju', 'ju', 'Ja', 'ja']);
+  return makeRules(cyrillic, czech);
+}
+
+function Rules_mk() {
+  var cyrillic = Array.from(
+    "АаБбВвГгЃѓДдЕеЖжЗзИиЈјКкЌќЛлМмНнОоПпРрСсТтУуФфЦцЧчШш" + "ХхЅѕЉљЊњЏџ"
+  );
+  var czech = Array.from(
+    "AaBbVvGgǴǵDdEeŽžZzIiJjKkḰḱLlMmNnOoPpRrSsTtUuFfCcČčŠš"
+  ).concat(['Ch', 'ch', 'Dz', 'dz', 'Lj', 'lj', 'Nj', 'nj', 'Dž', 'dž']);
+  return makeRules(cyrillic, czech);
+}
+
+function Rules_sr() {
+  var cyrillic = Array.from(
+    "АаБбВвГгДдЂђЕеЖжЗзИиЈјКкЛлМмНнОоПпРрСсТтЋћУуФфХхЦцЧчШш" + "ЉљЊњЏџ"
+  );
+  var czech = Array.from(
+    "AaBbVvGgDdĐđEeŽžZzIiJjKkLlMmNnOoPpRrSsTtĆćUuFfHhCcČčŠš"
+  ).concat(['Lj', 'lj', 'Nj', 'nj', 'Dž', 'dž']);
+  return makeRules(cyrillic, czech);
+}
+
+function makeRules(cyrillic, czech) {
+  var rulesDict = {};
   var len = cyrillic.length;
   for (var i = 0; i < len; i++) {
-    rules[cyrillic[i]] = czech[i];
+    rulesDict[cyrillic[i]] = czech[i];
   }
-  return rules;
+  return rulesDict;
 }
 
-
+//
+// transform rules
+//
 var rules = {};
-rules.ru = Rules_ru();
-rules.be = Rules_be();
-rules.uk = Rules_uk();
+rules.vocals = Array.from("АаЕеЁёИиІіОоУуЎўЪъЫыЬьЭэЮюЯя");
+for (let lang of ['ru', 'be', 'uk', 'bg', 'mk', 'sr']) {
+  rules[lang] = eval("Rules_" + lang)();
+}
 
-function tr_russian(input) {
+//
+// transliteration functions
+//
+function tr_russian(lang, input) {
   var len = input.length;
   var output = new Array(len);
   for (var i = 0; i < len; i++) {
-    if (input[i] in rules.ru) {
+    if (input[i] in rules[lang]) {
       if (
         "ЕЁ".includes(input[i]) &&
-        atBeginAndAfterVocals('ru', input, i)
+        atBeginAndAfterVocals(lang, input, i)
       ) {
         output[i] = 'J';
         if (isBetweenUpper(len, input, i)) {
@@ -90,51 +119,19 @@ function tr_russian(input) {
         }
       } else if (
           "её".includes(input[i]) &&
-          atBeginAndAfterVocals('ru', input, i)
+          atBeginAndAfterVocals(lang, input, i)
         ) {
         output[i] = 'je';
-      } else if (input[i] == 'И' && i > 0 && input[i - 1] == 'Ь') {
+      } else if (lang == 'ru' && input[i] == 'И' && i > 0 && input[i - 1] == 'Ь') {
         output[i] = 'JI';
-      } else if (input[i] == 'и' && i > 0 && input[i - 1] == 'Ь') {
+      } else if (lang == 'ru' && input[i] == 'и' && i > 0 && input[i - 1] == 'Ь') {
         output[i] = 'Ji';
-      } else if (input[i] == 'и' && i > 0 && input[i - 1] == 'ь') {
+      } else if (lang == 'ru' && input[i] == 'и' && i > 0 && input[i - 1] == 'ь') {
         output[i] = ('ji');
       } else if ("ХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
-        output[i] = rules.ru[input[i]].toUpperCase();
+        output[i] = rules[lang][input[i]].toUpperCase();
       } else {
-        output[i] = rules.ru[input[i]];
-      }
-    } else {
-      output[i] = input[i];
-    }
-  }
-  return output.join('');
-}
-
-function tr_belarusian(input) {
-  var len = input.length;
-  var output = new Array(len);
-  for (var i = 0; i < len; i++) {
-    if (input[i] in rules.be) {
-      if (
-        "ЕЁ".includes(input[i]) &&
-        atBeginAndAfterVocals('be', input, i)
-      ) {
-        output[i] = 'J';
-        if (isBetweenUpper(len, input, i)) {
-          output[i] += 'E';
-        } else {
-          output[i] += 'e';
-        }
-      } else if (
-          "её".includes(input[i]) &&
-          atBeginAndAfterVocals('be', input, i)
-      ) {
-        output[i] = 'je';
-      } else if ("ХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
-        output[i] = rules.be[input[i]].toUpperCase();
-      } else {
-        output[i] = rules.be[input[i]];
+        output[i] = rules[lang][input[i]];
       }
     } else {
       output[i] = input[i];
@@ -157,19 +154,18 @@ function atBeginAndAfterVocals(lang, input, i, waitForLess = false) {
   if (input[i - 1] == '>') {
     return atBeginAndAfterVocals(lang, input, i - 1, true);
   }
-  return !(input[i - 1] in rules[lang]) || rules[lang].vocals.includes(input[i - 1]);
+  return !(input[i - 1] in rules[lang]) || rules.vocals.includes(input[i - 1]);
 }
 
-
-function tr_ukrainian(input) {
+function tr_generic(input, lang) {
   var len = input.length;
   var output = new Array(len);
   for (var i = 0; i < len; i++) {
-    if (input[i] in rules.uk) {
-      if ("ЄЇХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
-        output[i] = rules.uk[input[i]].toUpperCase();
+    if (input[i] in rules[lang]) {
+      if ("ЄЇХЩЮЯЅЉЊЏ".includes(input[i]) && isBetweenUpper(len, input, i)) {
+        output[i] = rules[lang][input[i]].toUpperCase();
       } else {
-        output[i] = rules.uk[input[i]];
+        output[i] = rules[lang][input[i]];
       }
     } else {
       output[i] = input[i];
