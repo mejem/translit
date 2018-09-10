@@ -64,14 +64,21 @@ var inputText = $("#inputText");
 inputText.on('input', function() {
     clearTimeout($(this).data('timeout'));
     $(this).data('timeout', setTimeout(function(){
-      translitWorker.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.html()});
+      postMessageToWorker();
     }, 100));
 });
 $("input[name=lang]").change(function(){
-  translitWorker.postMessage({lang: $("input[name=lang]:checked").val(), inputText: inputText.html()});
+  postMessageToWorker();
 });
 translitWorker.onmessage = function(e) {
   $('#output').html(e.data);
+}
+
+function postMessageToWorker() {
+  translitWorker.postMessage({
+    lang: $("input[name=lang]:checked").val(),
+    inputText: inputText.html()
+  });
 }
 
 // copy to clipboard (http://jsfiddle.net/jdhenckel/km7prgv4/3/)

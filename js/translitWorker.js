@@ -17,7 +17,7 @@ function transliterate(lang, inputText) {
 }
 
 function Rules_ru() {
-  var cyrilic = Array.from(
+  var cyrillic = Array.from(
     "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЫыЬьЭэ" + "ХхЩщЮюЯя"
   );
   var czech = Array.from(
@@ -25,25 +25,25 @@ function Rules_ru() {
   ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   var vocals = Array.from("АаЕеЁёИиОоУуЪъЫыЬьЭэЮюЯя");
   var rules = {};
-  var len = cyrilic.length;
+  var len = cyrillic.length;
   for (var i = 0; i < len; i++) {
-    rules[cyrilic[i]] = czech[i];
+    rules[cyrillic[i]] = czech[i];
   }
   rules["vocals"] = vocals;
   return rules;
 }
 
 function Rules_uk() {
-  var cyrilic = Array.from(
+  var cyrillic = Array.from(
     "АаБбВвГгҐґДдЕеЖжЗзИиІіЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЬь" + "ЄєЇїХхЩщЮюЯя"
   );
   var czech = Array.from(
     "AaBbVvHhGgDdEeŽžZzYyÌìJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš’’"
   ).concat(['Je', 'je', 'Ji', 'ji', 'Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   var rules = {};
-  var len = cyrilic.length;
+  var len = cyrillic.length;
   for (var i = 0; i < len; i++) {
-    rules[cyrilic[i]] = czech[i];
+    rules[cyrillic[i]] = czech[i];
   }
   return rules;
 }
@@ -57,7 +57,7 @@ function tr_russian(input) {
   for (var i = 0; i < len; i++) {
     if (input[i] in rules_ru) {
       if ("ЕЁ".includes(input[i]) &&
-        (atBeginAndAfterApos(input, i) || rules_ru.vocals.includes(input[i - 1]))
+        atBeginAndAfterVocals(input, i)
       ) {
         output[i] = 'J';
         if (isBetweenUpper(len, input, i)) {
@@ -66,7 +66,7 @@ function tr_russian(input) {
           output[i] += 'e';
         }
       } else if ("её".includes(input[i]) &&
-        (atBeginAndAfterApos(input, i) || rules_ru.vocals.includes(input[i - 1]))
+        atBeginAndAfterVocals(input, i)
       ) {
         output[i] = 'je';
       } else if (input[i] == 'И' && i > 0 && input[i - 1] == 'Ь') {
@@ -87,11 +87,21 @@ function tr_russian(input) {
   return output.join('');
 }
 
-function atBeginAndAfterApos(input, i) {
-  return (
-    i == 0 ||
-    /[\s\n\r\v\t.,'"+!?\-«»“”„`’‹›—–−]/.test(input[i - 1])
-  );
+function atBeginAndAfterVocals(input, i, waitForLess = false) {
+  if (i < 1) {
+    return true;
+  }
+  if (waitForLess) {
+    if (input[i] != '<') {
+      return atBeginAndAfterVocals(input, i - 1, true);
+    } else {
+      return atBeginAndAfterVocals(input, i);
+    }
+  }
+  if (input[i - 1] == '>') {
+    return atBeginAndAfterVocals(input, i - 1, true);
+  }
+  return !(input[i - 1] in rules_ru) || rules_ru.vocals.includes(input[i - 1]);
 }
 
 
