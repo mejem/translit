@@ -11,7 +11,9 @@ function transliterate(lang, inputText) {
     return tr_russian(input);
   } else if (lang == 'uk') {
     return tr_ukrainian(input);
-  } else {
+  } else if (lang == 'be') {
+    return tr_belarusian(input);
+  }  else {
     throw 'Error: Unsupported lang string: ' + lang;
   }
 }
@@ -21,9 +23,26 @@ function Rules_ru() {
     "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЫыЬьЭэ" + "ХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš””Yy’’Èè"
+    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš““Yy‘‘Èè"
   ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
-  var vocals = Array.from("АаЕеЁёИиОоУуЪъЫыЬьЭэЮюЯя");
+  var vocals = Array.from("АаЕеЁёИиІіОоУуЎўЪъЫыЬьЭэЮюЯя");
+  var rules = {};
+  var len = cyrillic.length;
+  for (var i = 0; i < len; i++) {
+    rules[cyrillic[i]] = czech[i];
+  }
+  rules["vocals"] = vocals;
+  return rules;
+}
+
+function Rules_be() {
+  var cyrillic = Array.from(
+    "АаБбВвГгДдЕеЁёЖжЗзІіЙйКкЛлМмНнОоПпРрСсТтУуЎўФфЦцЧчШшЫыЬьЭэ" + "ХхЩщЮюЯя"
+  );
+  var czech = Array.from(
+    "AaBbVvHhDdEeEeŽžZzÌìJjKkLlMmNnOoPpRrSsTtUuŬŭFfCcČčŠšYy‘‘Èè"
+  ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
+  var vocals = Array.from("АаЕеЁёИиІіОоУуЎўЪъЫыЬьЭэЮюЯя");
   var rules = {};
   var len = cyrillic.length;
   for (var i = 0; i < len; i++) {
@@ -35,10 +54,10 @@ function Rules_ru() {
 
 function Rules_uk() {
   var cyrillic = Array.from(
-    "АаБбВвГгҐґДдЕеЖжЗзИиІіЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЬь" + "ЄєЇїХхЩщЮюЯя"
+    "АаБбВвГгҐґДдЕеЖжЗзИиІіЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЬьЫы" + "ЄєЇїХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvHhGgDdEeŽžZzYyÌìJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš’’"
+    "AaBbVvHhGgDdEeŽžZzYyÌìJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš‘‘Ỳỳ"
   ).concat(['Je', 'je', 'Ji', 'ji', 'Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   var rules = {};
   var len = cyrillic.length;
@@ -48,16 +67,20 @@ function Rules_uk() {
   return rules;
 }
 
-var rules_ru = Rules_ru();
-var rules_uk = Rules_uk();
+
+var rules = {};
+rules.ru = Rules_ru();
+rules.be = Rules_be();
+rules.uk = Rules_uk();
 
 function tr_russian(input) {
   var len = input.length;
   var output = new Array(len);
   for (var i = 0; i < len; i++) {
-    if (input[i] in rules_ru) {
-      if ("ЕЁ".includes(input[i]) &&
-        atBeginAndAfterVocals(input, i)
+    if (input[i] in rules.ru) {
+      if (
+        "ЕЁ".includes(input[i]) &&
+        atBeginAndAfterVocals('ru', input, i)
       ) {
         output[i] = 'J';
         if (isBetweenUpper(len, input, i)) {
@@ -65,9 +88,10 @@ function tr_russian(input) {
         } else {
           output[i] += 'e';
         }
-      } else if ("её".includes(input[i]) &&
-        atBeginAndAfterVocals(input, i)
-      ) {
+      } else if (
+          "её".includes(input[i]) &&
+          atBeginAndAfterVocals('ru', input, i)
+        ) {
         output[i] = 'je';
       } else if (input[i] == 'И' && i > 0 && input[i - 1] == 'Ь') {
         output[i] = 'JI';
@@ -76,9 +100,9 @@ function tr_russian(input) {
       } else if (input[i] == 'и' && i > 0 && input[i - 1] == 'ь') {
         output[i] = ('ji');
       } else if ("ХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
-        output[i] = rules_ru[input[i]].toUpperCase();
+        output[i] = rules.ru[input[i]].toUpperCase();
       } else {
-        output[i] = rules_ru[input[i]];
+        output[i] = rules.ru[input[i]];
       }
     } else {
       output[i] = input[i];
@@ -87,21 +111,53 @@ function tr_russian(input) {
   return output.join('');
 }
 
-function atBeginAndAfterVocals(input, i, waitForLess = false) {
+function tr_belarusian(input) {
+  var len = input.length;
+  var output = new Array(len);
+  for (var i = 0; i < len; i++) {
+    if (input[i] in rules.be) {
+      if (
+        "ЕЁ".includes(input[i]) &&
+        atBeginAndAfterVocals('be', input, i)
+      ) {
+        output[i] = 'J';
+        if (isBetweenUpper(len, input, i)) {
+          output[i] += 'E';
+        } else {
+          output[i] += 'e';
+        }
+      } else if (
+          "её".includes(input[i]) &&
+          atBeginAndAfterVocals('be', input, i)
+      ) {
+        output[i] = 'je';
+      } else if ("ХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
+        output[i] = rules.be[input[i]].toUpperCase();
+      } else {
+        output[i] = rules.be[input[i]];
+      }
+    } else {
+      output[i] = input[i];
+    }
+  }
+  return output.join('');
+}
+
+function atBeginAndAfterVocals(lang, input, i, waitForLess = false) {
   if (i < 1) {
     return true;
   }
   if (waitForLess) {
     if (input[i] != '<') {
-      return atBeginAndAfterVocals(input, i - 1, true);
+      return atBeginAndAfterVocals(lang, input, i - 1, true);
     } else {
-      return atBeginAndAfterVocals(input, i);
+      return atBeginAndAfterVocals(lang, input, i);
     }
   }
   if (input[i - 1] == '>') {
-    return atBeginAndAfterVocals(input, i - 1, true);
+    return atBeginAndAfterVocals(lang, input, i - 1, true);
   }
-  return !(input[i - 1] in rules_ru) || rules_ru.vocals.includes(input[i - 1]);
+  return !(input[i - 1] in rules[lang]) || rules[lang].vocals.includes(input[i - 1]);
 }
 
 
@@ -109,11 +165,11 @@ function tr_ukrainian(input) {
   var len = input.length;
   var output = new Array(len);
   for (var i = 0; i < len; i++) {
-    if (input[i] in rules_uk) {
+    if (input[i] in rules.uk) {
       if ("ЄЇХЩЮЯ".includes(input[i]) && isBetweenUpper(len, input, i)) {
-        output[i] = rules_uk[input[i]].toUpperCase();
+        output[i] = rules.uk[input[i]].toUpperCase();
       } else {
-        output[i] = rules_uk[input[i]];
+        output[i] = rules.uk[input[i]];
       }
     } else {
       output[i] = input[i];

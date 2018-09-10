@@ -54,6 +54,9 @@ $(window).on("load", function() {
 $('#ru').click(function () {
     localStorage["checked"] = "ru";
 });
+$('#be').click(function () {
+    localStorage["checked"] = "be";
+});
 $('#uk').click(function () {
     localStorage["checked"] = "uk";
 });
