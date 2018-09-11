@@ -26,7 +26,7 @@ function Rules_ru() {
     "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЫыЬьЭэѴѵѲѳІіѢѣ" + "ХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš””Yy’’ÈèỲỳFfÌì"
+    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš””Yy’’ÈèỲỳFfÌìĔĕ"
   ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   return makeRules(cyrillic, czech);
 }

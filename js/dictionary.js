@@ -14,6 +14,9 @@ translatedText.langEn = {
   copyToClip: "Copy to clipboard",
   copied: "Copied!",
   empty: "Output empty",
+  according: "Transliteration according to the",
+  norm: "czech norm",
+  view: "View the",
   source: "source code",
 }
 translatedText.langRu = {
@@ -31,6 +34,9 @@ translatedText.langRu = {
   copyToClip: "Копировать в буфер",
   copied: "Скопировать!",
   empty: "Выход пустой",
+  according: "Транслитерация по",
+  norm: "чешскому стандарту",
+  view: "Просмотреть",
   source: "исходный код",
 }
 translatedText.langCs = {
@@ -48,5 +54,8 @@ translatedText.langCs = {
   copyToClip: "Zkopírovat do schránky",
   copied: "Zkopírováno!",
   empty: "Výstup je prázdný",
+  according: "Transliterace podle",
+  norm: "české normy",
+  view: "Zobrazit",
   source: "zdrojový kód",
 }
