@@ -23,10 +23,10 @@ function transliterate(lang, inputText) {
 //
 function Rules_ru() {
   var cyrillic = Array.from(
-    "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЫыЬьЭэ" + "ХхЩщЮюЯя"
+    "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЫыЬьЭэѴѵѲѳІіѢѣ" + "ХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš““Yy‘‘Èè"
+    "AaBbVvGgDdEeEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš””Yy’’ÈèỲỳFfÌì"
   ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   return makeRules(cyrillic, czech);
 }
@@ -36,7 +36,7 @@ function Rules_be() {
     "АаБбВвГгДдЕеЁёЖжЗзІіЙйКкЛлМмНнОоПпРрСсТтУуЎўФфЦцЧчШшЫыЬьЭэ" + "ХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvHhDdEeEeŽžZzÌìJjKkLlMmNnOoPpRrSsTtUuŬŭFfCcČčŠšYy‘‘Èè"
+    "AaBbVvHhDdEeEeŽžZzÌìJjKkLlMmNnOoPpRrSsTtUuŬŭFfCcČčŠšYy’’Èè"
   ).concat(['Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   return makeRules(cyrillic, czech);
 }
@@ -46,7 +46,7 @@ function Rules_uk() {
     "АаБбВвГгҐґДдЕеЖжЗзИиІіЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЬьЫы" + "ЄєЇїХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvHhGgDdEeŽžZzYyÌìJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš‘‘Ỳỳ"
+    "AaBbVvHhGgDdEeŽžZzYyÌìJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠš’’Ỳỳ"
   ).concat(['Je', 'je', 'Ji', 'ji', 'Ch', 'ch', 'Šč', 'šč', 'Ju', 'ju', 'Ja', 'ja']);
   return makeRules(cyrillic, czech);
 }
@@ -56,7 +56,7 @@ function Rules_bg() {
     "АаБбВвГгДдЕеЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфЦцЧчШшЪъЬь" + "ХхЩщЮюЯя"
   );
   var czech = Array.from(
-    "AaBbVvGgDdEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠšĂă‘‘"
+    "AaBbVvGgDdEeŽžZzIiJjKkLlMmNnOoPpRrSsTtUuFfCcČčŠšĂă’’"
   ).concat(['Ch', 'ch', 'Št', 'št', 'Ju', 'ju', 'Ja', 'ja']);
   return makeRules(cyrillic, czech);
 }
