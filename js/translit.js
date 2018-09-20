@@ -1,11 +1,10 @@
 "use strict";
 
-// dismiss "enable JavaScript" warning
-document.getElementById('output').innerHTML = '';
-
-// focus on input
 $(document).ready(function() {
+  // focus on input
   $("#inputText").focus();
+  // dismiss "enable JavaScript" warning
+  $("#output").empty();
 });
 
 // fill template with mustache
