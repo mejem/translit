@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/w3.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/jquery-3.3.1.slim.min.js"></script>
+  <script src="js/mustache.min.js"></script>
 </head>
 
 <body>
@@ -37,57 +38,20 @@
 <div id="inputText" class="textarealook" contenteditable="true" spellcheck="false"></div>
 </div>
 
-<div class="w3-container">
-<label for="ru">
+<script id="template" type="x-tmpl-mustache">
+<label for="{{ lang }}">
   <span class="lang w3-btn w3-white w3-border w3-round-large">
-    <input class="w3-check" id="ru" type="radio" name="lang" value="ru" checked>
-    <span class="langText" id="t_ru">&nbsp;</span>
-    <img src="img/ru.png" class="w3-border w3-round flag" alt="ru flag">
+    <input class="w3-check" id="{{ lang }}" type="radio" name="lang" value="{{ lang }}">
+    <span class="langText" id="t_{{ lang }}">&nbsp;</span>
+    <img src="img/{{ lang }}.png" class="w3-border w3-round flag" alt="{{ lang }} flag">
   </span>
 </label>
-
-<label for="be">
-  <span class="lang w3-btn w3-white w3-border w3-round-large">
-    <input class="w3-check" id="be" type="radio" name="lang" value="be" checked>
-    <span class="langText" id="t_be">&nbsp;</span>
-    <img src="img/be.png" class="w3-border w3-round flag" alt="be flag">
-  </span>
-</label>
-
-<label for="uk">
-  <span class="lang w3-btn w3-white w3-border w3-round-large">
-    <input class="w3-check" id="uk" type="radio" name="lang" value="uk">
-    <span class="langText" id="t_uk">&nbsp;</span>
-    <img src="img/uk.png" class="w3-border w3-round flag" alt="uk flag">
-  </span>
-</label>
-
-<label for="bg">
-  <span class="lang w3-btn w3-white w3-border w3-round-large">
-    <input class="w3-check" id="bg" type="radio" name="lang" value="bg">
-    <span class="langText" id="t_bg">&nbsp;</span>
-    <img src="img/bg.png" class="w3-border w3-round flag" alt="bg flag">
-  </span>
-</label>
-
-<label for="mk">
-  <span class="lang w3-btn w3-white w3-border w3-round-large">
-    <input class="w3-check" id="mk" type="radio" name="lang" value="mk">
-    <span class="langText" id="t_mk">&nbsp;</span>
-    <img src="img/mk.png" class="w3-border w3-round flag" alt="mk flag">
-  </span>
-</label>
-
-<label for="sr">
-  <span class="lang w3-btn w3-white w3-border w3-round-large">
-    <input class="w3-check" id="sr" type="radio" name="lang" value="sr">
-    <span class="langText" id="t_sr">&nbsp;</span>
-    <img src="img/sr.png" class="w3-border w3-round flag" alt="sr flag">
-  </span>
-</label>
-</div>
-
+</script>
 <!-- //www.statnivlajky.cz/data/flags/small/ua.png -->
+
+<div id="target" class="w3-container">
+ <!-- To be filled by mustache -->
+</div>
 
 <div class="w3-container">
 <h4 id="t_latin">&nbsp;</h4>

@@ -4,8 +4,18 @@
 document.getElementById('output').innerHTML = '';
 
 // focus on input
-$(window).on("load", function() {
+$(document).ready(function() {
   $("#inputText").focus();
+});
+
+// fill template with mustache
+$(document).ready(function() {
+  var template = $("#template").html();
+  Mustache.parse(template);
+  var target = $("#target");
+  for (let lang of ['ru', 'be', 'uk', 'bg', 'mk', 'sr']) {
+    target.append(Mustache.render(template, {lang: lang}));
+  }
 });
 
 // switch webpage language
@@ -15,7 +25,7 @@ for (var lang in translatedText) {
 }
 webpageLanguages = webpageLanguages.slice(0,-2);
 
-$(window).on("load", function() {
+$(document).ready(function() {
   var webPageLang = localStorage["lang"];
   if (webPageLang) {
     $('#' + webPageLang).addClass("w3-white");
@@ -47,12 +57,15 @@ function switchWebpageLang(lang) {
 }
 
 // remember last checked translit language
-$(window).on("load", function() {
-  $('#' + localStorage["checked"]).prop('checked', true);
-});
-
-$('#ru, #be, #uk, #bg, #mk, #sr').click(function () {
-  localStorage["checked"] = this.id;
+$(document).ready(function() {
+  if (localStorage["checked"]) {
+    $('#' + localStorage["checked"]).prop('checked', true);
+  } else {
+    $('#ru').prop('checked', true);
+  }
+  $('#ru, #be, #uk, #bg, #mk, #sr').click(function () {
+    localStorage["checked"] = this.id;
+  });
 });
 
 // traliterate
