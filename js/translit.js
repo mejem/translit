@@ -76,8 +76,11 @@ inputText.on('input', function() {
       postMessageToWorker();
     }, 100));
 });
-$("input[name=lang]").change(function(){
-  postMessageToWorker();
+
+$(document).ready(function() {
+  $("input[name=lang]").change(function(){
+    postMessageToWorker();
+  });
 });
 translitWorker.onmessage = function(e) {
   $('#output').html(e.data);
