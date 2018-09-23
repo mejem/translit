@@ -95,14 +95,12 @@ p.footer {
   text-align: center;
 }
 
-
-
-.tooltip {
+.copy {
   margin: 10px;
   position: relative;
   display: inline-block;
 }
-
+/*
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 200px;
@@ -134,4 +132,4 @@ p.footer {
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
-}
+} */

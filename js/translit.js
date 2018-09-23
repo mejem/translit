@@ -93,31 +93,40 @@ function postMessageToWorker() {
   });
 }
 
+// copy to clipboard
+var clipboard = new ClipboardJS($('#copyButton')[0]);
+
+// $(document).ready(function() {
+//   var tooltip = document.getElementById("t_copyToClip");
+//   var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
+//   tooltip.innerHTML = translatedText[currentLang].copied;
+// });
 // copy to clipboard (http://jsfiddle.net/jdhenckel/km7prgv4/3/)
-function copyToClip(str) {
-  var tooltip = document.getElementById("t_copyToClip");
-  var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
-  if (str) {
-    function listener(e) {
-      e.clipboardData.setData("text/html", str);
-      e.clipboardData.setData("text/plain", str);
-      e.preventDefault();
-    }
-    document.addEventListener("copy", listener);
-    document.execCommand("copy");
-    document.removeEventListener("copy", listener);
-    tooltip.innerHTML = translatedText[currentLang].copied;
-  } else {
-    tooltip.innerHTML = translatedText[currentLang].empty;
-  }
-}
-function outFunc() {
-  var tooltip = document.getElementById("t_copyToClip");
-  var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
-  tooltip.innerHTML = translatedText[currentLang].copyToClip;
-}
+// function copyToClip(str) {
+  // var tooltip = document.getElementById("t_copyToClip");
+  // var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
+//   if (str) {
+//     function listener(e) {
+//       e.clipboardData.setData("text/html", str);
+//       e.clipboardData.setData("text/plain", str);
+//       e.preventDefault();
+//     }
+//     document.addEventListener("copy", listener);
+//     document.execCommand("copy");
+//     document.removeEventListener("copy", listener);
+    // tooltip.innerHTML = translatedText[currentLang].copied;
+//   } else {
+//     tooltip.innerHTML = translatedText[currentLang].empty;
+//   }
+// }
+// function outFunc() {
+//   var tooltip = document.getElementById("t_copyToClip");
+//   var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
+//   tooltip.innerHTML = translatedText[currentLang].copyToClip;
+// }
 
 // uneditable editabe div (http://jsfiddle.net/wfae8hzv/20/)
+// CAVEATS: cut mysi funguje, ctrl+v funguje
 $("#output").keydown(function (event) {
     if (event.ctrlKey && event.keyCode === 88)
     {
