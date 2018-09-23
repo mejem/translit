@@ -17,6 +17,35 @@ $(document).ready(function() {
   }
 });
 
+// copy to clipboard
+var clipboard = new ClipboardJS($('#copyButton')[0]);
+
+clipboard.on('success', function(e) {
+    copied(e.text != "");
+});
+clipboard.on('error', function(e) {
+    console.log(e);
+});
+
+function copied(really) {
+  var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
+  var button = $("#copyButton");
+  var buttonText = $("#t_copy");
+  button.removeClass("w3-white");
+  button.addClass("w3-blue");
+  if (!really) {
+    buttonText.text(translatedText[currentLang].empty);
+  } else {
+    buttonText.text(translatedText[currentLang].copied);
+  }
+  window.setTimeout( function() {
+    var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
+    button.removeClass("w3-blue");
+    button.addClass("w3-white");
+    buttonText.text(translatedText[currentLang].copy);
+  }, 2000 );
+}
+
 // switch webpage language
 var webpageLanguages = '';
 for (var lang in translatedText) {
@@ -53,6 +82,9 @@ function switchWebpageLang(lang) {
   for (var key in translatedText.langEn) {
     $("#t_" + key).text(translatedText[lang][key]);
   }
+  var button = $("#copyButton");
+  button.removeClass("w3-blue");
+  button.addClass("w3-white");
 }
 
 // remember last checked translit language
@@ -92,38 +124,6 @@ function postMessageToWorker() {
     inputText: inputText.html()
   });
 }
-
-// copy to clipboard
-var clipboard = new ClipboardJS($('#copyButton')[0]);
-
-// $(document).ready(function() {
-//   var tooltip = document.getElementById("t_copyToClip");
-//   var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
-//   tooltip.innerHTML = translatedText[currentLang].copied;
-// });
-// copy to clipboard (http://jsfiddle.net/jdhenckel/km7prgv4/3/)
-// function copyToClip(str) {
-  // var tooltip = document.getElementById("t_copyToClip");
-  // var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
-//   if (str) {
-//     function listener(e) {
-//       e.clipboardData.setData("text/html", str);
-//       e.clipboardData.setData("text/plain", str);
-//       e.preventDefault();
-//     }
-//     document.addEventListener("copy", listener);
-//     document.execCommand("copy");
-//     document.removeEventListener("copy", listener);
-    // tooltip.innerHTML = translatedText[currentLang].copied;
-//   } else {
-//     tooltip.innerHTML = translatedText[currentLang].empty;
-//   }
-// }
-// function outFunc() {
-//   var tooltip = document.getElementById("t_copyToClip");
-//   var currentLang = $("button[id^='lang'][class~='w3-white']").prop('id');
-//   tooltip.innerHTML = translatedText[currentLang].copyToClip;
-// }
 
 // uneditable editabe div (http://jsfiddle.net/wfae8hzv/20/)
 // CAVEATS: cut mysi funguje, ctrl+v funguje
