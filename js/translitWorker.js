@@ -7,9 +7,7 @@ onmessage = function onmessage(e) {
 
 function transliterate(lang, inputText) {
   var input = Array.from(inputText);
-  if (lang == 'ru') {
-    return tr_russian(lang, input);
-  } else if (lang == 'be') {
+  if (lang == 'ru' || lang == 'be') {
     return tr_russian(lang, input);
   } else if (!(lang in rules)) {
     throw 'Error: Unsupported lang string: ' + lang;
